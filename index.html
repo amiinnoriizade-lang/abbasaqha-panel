@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>پنل مدیریت وی‌پی‌ان عباس آقا | AbbasAgha Panel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" />
+  <style>
+    [data-theme="abbasagha"] { --bg-main: #060908; --bg-card: #0d1411; --bg-sidebar: #090e0c; --accent: #00ff88; --accent-soft: rgba(0,255,136,0.15); --text-main: #f0fdf4; --border-color: rgba(0,255,136,0.25); }
+    [data-theme="zahra"] { --bg-main: #180914; --bg-card: #261020; --bg-sidebar: #1f0c1a; --accent: #ff4da6; --accent-soft: rgba(255,77,166,0.18); --text-main: #fff0f7; --border-color: rgba(255,77,166,0.3); }
+    [data-theme="ice"] { --bg-main: #eaf6ff; --bg-card: #ffffff; --bg-sidebar: #dff0fc; --accent: #0284c7; --accent-soft: rgba(2,132,199,0.12); --text-main: #0c4a6e; --border-color: rgba(2,132,199,0.25); }
+    [data-theme="cyrus"] { --bg-main: #0d0b08; --bg-card: #18140e; --bg-sidebar: #120f0a; --accent: #eab308; --accent-soft: rgba(234,179,8,0.16); --text-main: #fefce8; --border-color: rgba(234,179,8,0.32); }
+    body { font-family: 'Vazirmatn', sans-serif; background-color: var(--bg-main); color: var(--text-main); transition: all 0.3s ease; }
+    .panel-card { background-color: var(--bg-card); border: 1px solid var(--border-color); }
+    .panel-sidebar { background-color: var(--bg-sidebar); border-left: 1px solid var(--border-color); }
+    .accent-btn { background-color: var(--accent); color: #050807; font-weight: 700; }
+    .accent-badge { background-color: var(--accent-soft); color: var(--accent); border: 1px solid var(--border-color); }
+    .nav-item.active { background-color: var(--accent-soft); color: var(--accent); border-right: 3px solid var(--accent); }
+  </style>
+</head>
+<body data-theme="abbasagha" class="min-h-screen">
+  <div id="login-screen" class="min-h-screen flex items-center justify-center p-4">
+    <div class="panel-card max-w-md w-full rounded-3xl p-8 shadow-2xl text-center">
+      <div id="login-logo-box" class="w-24 h-24 mx-auto rounded-full panel-card flex items-center justify-center mb-3 overflow-hidden"></div>
+      <h1 class="text-2xl font-extrabold mb-4" style="color: var(--accent)">پنل مدیریت عباس آقا</h1>
+      <input id="login-user" type="text" value="admin" class="w-full px-4 py-3 rounded-xl bg-black/20 border border-white/10 mb-3" />
+      <input id="login-pass" type="password" value="Abbas@1405" class="w-full px-4 py-3 rounded-xl bg-black/20 border border-white/10 mb-4" />
+      <button onclick="doLogin()" class="w-full py-3.5 rounded-xl accent-btn cursor-pointer">ورود به پنل مدیریت 🚀</button>
+    </div>
+  </div>
+
+  <div id="app-screen" class="hidden min-h-screen flex flex-col md:flex-row">
+    <aside class="panel-sidebar w-full md:w-64 p-5 flex flex-col justify-between shrink-0">
+      <div>
+        <div class="flex items-center gap-3 pb-5 mb-5 border-b border-white/10">
+          <div id="brand-logo" class="w-12 h-12 rounded-2xl panel-card flex items-center justify-center overflow-hidden"></div>
+          <div>
+            <h2 id="brand-title" class="font-extrabold text-lg" style="color: var(--accent)">عباس آقا</h2>
+            <span id="brand-subtitle" class="text-[11px] opacity-75">داش مشتی v2.0</span>
+          </div>
+        </div>
+        <nav class="space-y-1.5 text-sm font-medium">
+          <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-item active w-full flex items-center gap-3 px-4 py-3 rounded-xl">📊 داشبورد زنده</button>
+          <button onclick="switchTab('users')" id="nav-users" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl">👥 کاربران و پروتکل‌ها</button>
+          <button onclick="switchTab('nodes')" id="nav-nodes" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl">🌍 نودها و لوکیشن‌ها</button>
+          <button onclick="switchTab('tunnels')" id="nav-tunnels" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl">🚇 تانل BackPack</button>
+          <button onclick="switchTab('outbounds')" id="nav-outbounds" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl">🔀 اوتباند (Outbound)</button>
+          <button onclick="switchTab('resellers')" id="nav-resellers" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl">🤝 پنل نمایندگان</button>
+          <button onclick="switchTab('settings')" id="nav-settings" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl">🎨 تم‌ها و درگاه ربات</button>
+        </nav>
+      </div>
+      <button onclick="location.reload()" class="w-full py-2.5 rounded-xl bg-rose-500/15 text-rose-400 text-xs font-bold mt-6">🚪 خروج</button>
+    </aside>
+
+    <main class="flex-1 p-6 overflow-y-auto">
+      <header class="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <div>
+          <h1 class="text-2xl font-extrabold">پنل جامع عباس آقا</h1>
+          <p class="text-xs opacity-70 mt-1" id="server-geo-bar">در حال اتصال به سرور...</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <select id="quick-theme-select" onchange="applyTheme(this.value)" class="panel-card px-3 py-2 rounded-xl text-xs font-bold">
+            <option value="abbasagha">🧔🏻‍♂️ تم عباس آقا (سبز نئونی)</option>
+            <option value="zahra">💃🏻 تم زهرا جون (صورتی شیک)</option>
+            <option value="ice">❄️ تم یخی (سفید و آبی)</option>
+            <option value="cyrus">🏛️ تم کوروش (تخت جمشید)</option>
+          </select>
+          <button onclick="document.getElementById('user-modal').classList.remove('hidden')" class="accent-btn px-4 py-2.5 rounded-xl text-xs">+ ساخت کاربر</button>
+        </div>
+      </header>
+
+      <section id="tab-dashboard" class="space-y-6">
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div class="panel-card p-5 rounded-2xl"><div class="text-xs opacity-75">CPU</div><div class="text-2xl font-extrabold mt-1" id="stat-cpu">0%</div></div>
+          <div class="panel-card p-5 rounded-2xl"><div class="text-xs opacity-75">RAM</div><div class="text-2xl font-extrabold mt-1" id="stat-ram">0%</div></div>
+          <div class="panel-card p-5 rounded-2xl"><div class="text-xs opacity-75">Disk</div><div class="text-2xl font-extrabold mt-1" id="stat-disk">0%</div></div>
+          <div class="panel-card p-5 rounded-2xl"><div class="text-xs opacity-75">سرعت لحظه‌ای</div><div class="text-sm font-bold mt-2 text-emerald-400" id="live-speed">⬆️ 0 KB/s | ⬇️ 0 KB/s</div></div>
+        </div>
+        <div class="panel-card rounded-2xl p-5">
+          <h3 class="font-bold mb-4">● کاربران آنلاین و انتقال دیتای لحظه‌ای (مشابه سنایی)</h3>
+          <table class="w-full text-right text-sm">
+            <thead class="border-b border-white/10 text-xs opacity-75"><tr><th class="py-2">کاربر</th><th>پروتکل</th><th>آپلود لحظه‌ای</th><th>دانلود لحظه‌ای</th><th>مصرف کل</th></tr></thead>
+            <tbody id="live-users-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="tab-users" class="hidden panel-card rounded-2xl p-5">
+        <h3 class="font-bold mb-4">لیست کاربران (V2Ray / WireGuard / OpenVPN / L2TP)</h3>
+        <table class="w-full text-right text-sm">
+          <thead class="border-b border-white/10 text-xs opacity-75"><tr><th class="py-2">نام</th><th>پروتکل</th><th>حجم</th><th>اشتراک</th><th>حذف</th></tr></thead>
+          <tbody id="users-table-body"></tbody>
+        </table>
+      </section>
+
+      <section id="tab-nodes" class="hidden panel-card rounded-2xl p-5">
+        <h3 class="font-bold mb-4">🌍 مدیریت نودها (لوکیشن‌ها)</h3>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
+          <input id="node-name" placeholder="نام لوکیشن (آلمان)" class="px-3 py-2 rounded-xl bg-black/20 border border-white/10" />
+          <input id="node-ip" placeholder="IP سرور نود" class="px-3 py-2 rounded-xl bg-black/20 border border-white/10" />
+          <input id="node-port" value="8080" class="px-3 py-2 rounded-xl bg-black/20 border border-white/10" />
+          <button onclick="addNode()" class="accent-btn rounded-xl py-2">+ افزودن نود</button>
+        </div>
+        <div id="nodes-grid" class="grid grid-cols-1 md:grid-cols-3 gap-3"></div>
+      </section>
+
+      <section id="tab-tunnels" class="hidden panel-card rounded-2xl p-5">
+        <h3 class="font-bold mb-4">🚇 تانل BackPack / Gost / IR-TNL</h3>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
+          <input id="tun-name" placeholder="نام تانل" class="px-3 py-2 rounded-xl bg-black/20 border border-white/10" />
+          <select id="tun-engine" class="px-3 py-2 rounded-xl bg-black/20 border border-white/10"><option value="backpack">BackPack Tunnel</option><option value="gost">Gost</option></select>
+          <input id="tun-ip" placeholder="IP سرور مقصد" class="px-3 py-2 rounded-xl bg-black/20 border border-white/10" />
+          <button onclick="addTunnel()" class="accent-btn rounded-xl py-2">ایجاد تانل</button>
+        </div>
+        <div id="tunnels-list" class="space-y-2"></div>
+      </section>
+
+      <section id="tab-outbounds" class="hidden panel-card rounded-2xl p-5"><h3 class="font-bold mb-3">🔀 اوتباندهای فعال</h3><div id="outbounds-list" class="space-y-2"></div></section>
+      <section id="tab-resellers" class="hidden panel-card rounded-2xl p-5"><h3 class="font-bold mb-3">🤝 نمایندگان فروش</h3><div id="resellers-list" class="space-y-2"></div></section>
+      <section id="tab-settings" class="hidden panel-card rounded-2xl p-5">
+        <h3 class="font-bold mb-4">🤖 تنظیمات ربات و درگاه‌ها (کارت به کارت، زرین‌پال، آبان‌گیت، ارز دیجیتال)</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+          <input id="set-bot-token" placeholder="توکن ربات تلگرام" class="px-3 py-2 rounded-xl bg-black/20 border border-white/10" />
+          <input id="set-card" placeholder="شماره کارت بانکی" class="px-3 py-2 rounded-xl bg-black/20 border border-white/10" />
+          <input id="set-zarinpal" placeholder="مرچنت کد زرین‌پال" class="px-3 py-2 rounded-xl bg-black/20 border border-white/10" />
+          <input id="set-abangate" placeholder="کلید API آبان‌گیت" class="px-3 py-2 rounded-xl bg-black/20 border border-white/10" />
+          <input id="set-crypto" placeholder="کلید API درگاه ارز دیجیتال" class="px-3 py-2 rounded-xl bg-black/20 border border-white/10" />
+        </div>
+        <button onclick="saveSettings()" class="accent-btn px-6 py-2.5 rounded-xl">ذخیره تنظیمات</button>
+      </section>
+    </main>
+  </div>
+
+  <div id="user-modal" class="hidden fixed inset-0 bg-black/75 flex items-center justify-center p-4 z-50">
+    <div class="panel-card max-w-md w-full rounded-3xl p-6">
+      <h3 class="font-bold text-lg mb-4" style="color: var(--accent)">➕ ساخت اشتراک جدید</h3>
+      <input id="new-u-name" placeholder="نام کاربری" class="w-full px-3 py-2.5 rounded-xl bg-black/20 border border-white/10 mb-3" />
+      <select id="new-u-proto" class="w-full px-3 py-2.5 rounded-xl bg-black/20 border border-white/10 mb-3">
+        <option value="v2ray">V2Ray / Reality</option>
+        <option value="wireguard">WireGuard</option>
+        <option value="openvpn">OpenVPN</option>
+        <option value="l2tp">L2TP / IPsec</option>
+      </select>
+      <div class="grid grid-cols-2 gap-3 mb-4">
+        <input id="new-u-gb" type="number" value="50" class="px-3 py-2.5 rounded-xl bg-black/20 border border-white/10" />
+        <input id="new-u-days" type="number" value="30" class="px-3 py-2.5 rounded-xl bg-black/20 border border-white/10" />
+      </div>
+      <div class="flex gap-2">
+        <button onclick="createUser()" class="flex-1 py-2.5 rounded-xl accent-btn">ساخت اکانت</button>
+        <button onclick="document.getElementById('user-modal').classList.add('hidden')" class="px-4 py-2.5 rounded-xl bg-white/10">بستن</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const THEME_LOGOS = {
+      abbasagha: `<svg viewBox="0 0 120 120" class="w-full h-full"><rect width="120" height="120" fill="#07120d"/><circle cx="60" cy="60" r="52" fill="none" stroke="#00ff88" stroke-width="3"/><path d="M35 42 C35 24, 85 24, 85 42 L88 47 L32 47 Z" fill="#1f2937" stroke="#00ff88" stroke-width="2"/><circle cx="60" cy="64" r="22" fill="#f3d2b3"/><path d="M44 68 Q52 62 60 68 Q68 62 76 68 Q72 78 60 72 Q48 78 44 68 Z" fill="#111827"/><path d="M36 98 C36 84, 84 84, 84 98" fill="#00ff88"/></svg>`,
+      zahra: `<svg viewBox="0 0 120 120" class="w-full h-full"><rect width="120" height="120" fill="#240b1d"/><circle cx="60" cy="60" r="52" fill="none" stroke="#ff4da6" stroke-width="3"/><path d="M32 58 C30 26, 90 26, 88 58 C92 82, 86 98, 80 102 L40 102 C34 98, 28 82, 32 58 Z" fill="#111827"/><circle cx="60" cy="56" r="18" fill="#fde2d2"/><path d="M36 104 L46 82 L60 90 L74 82 L84 104 Z" fill="#ff4da6"/></svg>`,
+      ice: `<svg viewBox="0 0 120 120" class="w-full h-full"><rect width="120" height="120" fill="#e0f2fe"/><circle cx="60" cy="60" r="50" fill="none" stroke="#0284c7" stroke-width="3"/><g stroke="#0284c7" stroke-width="4"><line x1="60" y1="22" x2="60" y2="98"/><line x1="22" y1="60" x2="98" y2="60"/></g></svg>`,
+      cyrus: `<svg viewBox="0 0 120 120" class="w-full h-full"><rect width="120" height="120" fill="#14100a"/><circle cx="60" cy="60" r="52" fill="none" stroke="#eab308" stroke-width="3"/><rect x="34" y="34" width="52" height="8" fill="#eab308"/><rect x="42" y="44" width="8" height="42" fill="#2dd4bf"/><rect x="70" y="44" width="8" height="42" fill="#2dd4bf"/><rect x="30" y="88" width="60" height="8" fill="#eab308"/></svg>`
+    };
+
+    function applyTheme(t) {
+      document.body.setAttribute("data-theme", t);
+      document.getElementById("brand-logo").innerHTML = THEME_LOGOS[t];
+      document.getElementById("login-logo-box").innerHTML = THEME_LOGOS[t];
+    }
+    window.addEventListener("DOMContentLoaded", () => applyTheme("abbasagha"));
+
+    let currentUser = null;
+    async function doLogin() {
+      const res = await fetch("/api/auth/login", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: document.getElementById("login-user").value, password: document.getElementById("login-pass").value })
+      });
+      if (!res.ok) return alert("خطا در ورود");
+      currentUser = await res.json();
+      document.getElementById("login-screen").classList.add("hidden");
+      document.getElementById("app-screen").classList.remove("hidden");
+      initLive();
+    }
+
+    function switchTab(tab) {
+      ["dashboard", "users", "nodes", "tunnels", "outbounds", "resellers", "settings"].forEach(t => {
+        document.getElementById("tab-" + t).classList.add("hidden");
+        document.getElementById("nav-" + t).classList.remove("active");
+      });
+      document.getElementById("tab-" + tab).classList.remove("hidden");
+      document.getElementById("nav-" + tab).classList.add("active");
+      if (tab === "users") loadUsers();
+    }
+
+    function initLive() {
+      const proto = location.protocol === "https:" ? "wss:" : "ws:";
+      const ws = new WebSocket(`${proto}//${location.host}/ws/live`);
+      ws.onmessage = (ev) => {
+        const d = JSON.parse(ev.data);
+        document.getElementById("stat-cpu").innerText = d.system.cpu_percent + "%";
+        document.getElementById("stat-ram").innerText = d.system.ram_percent + "%";
+        document.getElementById("stat-disk").innerText = d.system.disk_percent + "%";
+        document.getElementById("server-geo-bar").innerText = `IP: ${d.system.server_ip} | ${d.system.location}`;
+        document.getElementById("live-speed").innerText = `⬆️ ${(d.system.live_up_bps/1024).toFixed(1)} KB/s | ⬇️ ${(d.system.live_down_bps/1024).toFixed(1)} KB/s`;
+        document.getElementById("live-users-tbody").innerHTML = d.users.map(u => `<tr><td class="py-2">${u.username}</td><td>${u.protocol}</td><td>${(u.live_up_bps/1024).toFixed(1)} KB/s</td><td>${(u.live_down_bps/1024).toFixed(1)} KB/s</td><td>${u.used_gb}/${u.total_gb} GB</td></tr>`).join("");
+      };
+    }
+
+    async function loadUsers() {
+      const res = await fetch(`/api/users?owner=${currentUser.username}`);
+      const list = await res.json();
+      document.getElementById("users-table-body").innerHTML = list.map(u => `<tr><td class="py-2">${u.username}</td><td>${u.protocol}</td><td>${u.used_gb}/${u.total_gb} GB</td><td><a href="${u.sub_url}" target="_blank" class="underline">لینک اشتراک</a></td><td><button onclick="fetch('/api/users/${u.id}',{method:'DELETE'}).then(loadUsers)">🗑️</button></td></tr>`).join("");
+    }
+
+    async function createUser() {
+      await fetch("/api/users", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: document.getElementById("new-u-name").value,
+          protocol: document.getElementById("new-u-proto").value,
+          total_gb: parseFloat(document.getElementById("new-u-gb").value),
+          expire_days: parseInt(document.getElementById("new-u-days").value),
+          owner_username: currentUser.username
+        })
+      });
+      document.getElementById("user-modal").classList.add("hidden");
+      loadUsers();
+    }
+
+    async function addNode() {
+      await fetch("/api/nodes", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: document.getElementById("node-name").value, address: document.getElementById("node-ip").value, port: parseInt(document.getElementById("node-port").value) }) });
+      alert("نود اضافه شد");
+    }
+
+    async function addTunnel() {
+      await fetch("/api/tunnels", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: document.getElementById("tun-name").value, engine: document.getElementById("tun-engine").value, remote_ip: document.getElementById("tun-ip").value }) });
+      alert("تانل فعال شد");
+    }
+
+    async function saveSettings() {
+      await fetch("/api/settings", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          bot_token: document.getElementById("set-bot-token").value,
+          card_number: document.getElementById("set-card").value,
+          zarinpal_merchant: document.getElementById("set-zarinpal").value,
+          abangate_key: document.getElementById("set-abangate").value,
+          crypto_key: document.getElementById("set-crypto").value
+        })
+      });
+      alert("ذخیره شد");
+    }
+  </script>
+</body>
+</html>

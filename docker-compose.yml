@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  abbasagha-panel:
+    build: ./backend
+    container_name: abbasagha-panel
+    restart: unless-stopped
+    network_mode: host
+    privileged: true
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+      - ./frontend:/app/frontend
+      - ./tunnels:/app/tunnels
+      - ./core-configs:/app/core-configs
+      - /etc/wireguard:/etc/wireguard
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  xray-core:
+    image: teddysun/xray:latest
+    container_name: abbasagha-xray
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./core-configs/xray:/etc/xray
+      - ./data:/app/data
+
+  abbasagha-bot:
+    build: ./bot
+    container_name: abbasagha-bot
+    restart: unless-stopped
+    network_mode: host
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - abbasagha-panel
